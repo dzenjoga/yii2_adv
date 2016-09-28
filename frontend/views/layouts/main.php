@@ -14,7 +14,7 @@ AppAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
-<html lang="<?= Yii::$app->language ?>">
+
 <head>
     <meta charset="<?= Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -22,8 +22,9 @@ AppAsset::register($this);
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
 </head>
-<body>
+
 <?php $this->beginBody() ?>
+
 
 <div class="wrap">
     <?php
@@ -64,8 +65,12 @@ AppAsset::register($this);
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ]) ?>
         <?= Alert::widget() ?>
+        
+        <h2> Layout main </h2>
         <?= $content ?>
+        
     </div>
+
 </div>
 
 <footer class="footer">
@@ -77,6 +82,6 @@ AppAsset::register($this);
 </footer>
 
 <?php $this->endBody() ?>
-</body>
-</html>
+
+
 <?php $this->endPage() ?>

@@ -6,12 +6,14 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\models\LoginForm;
+use common\models\Twit;
 
 /**
  * Site controller
  */
 class SiteController extends Controller
 {
+    
     /**
      * @inheritdoc
      */
@@ -24,12 +26,18 @@ class SiteController extends Controller
                     [
                         'actions' => ['login', 'error'],
                         'allow' => true,
+                  
                     ],
                     [
                         'actions' => ['logout', 'index'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
+                    [
+                        'actions' => ['create-twit'],
+                        'allow' => true,
+                        'roles' => ['?'],
+                    ]
                 ],
             ],
             'verbs' => [
@@ -94,5 +102,26 @@ class SiteController extends Controller
         Yii::$app->user->logout();
 
         return $this->goHome();
+    }
+    
+    public function actionCreateTwit()
+    {
+       $twit = new Twit();
+       
+       $post = Yii::$app->request->post("Twit");
+       if(count($post))
+       {
+           $twit->text = $post['text'];
+           $twit->image = $post['image'];
+           
+           if($twit->save())
+           {
+               $twit = new Twit();
+           }    
+       }
+       
+        return $this->render('create_twit', [
+                'model' => $twit,
+        ]);
     }
 }
