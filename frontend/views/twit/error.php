@@ -12,7 +12,7 @@ $this->title = $name;
 <div class="col-sm-8 col-sm-offset-1 blog-main">
 
           <div class="row">
-            <div class="col-sm-6">
+          
 
               <section class="blog-post">
                 <div class="panel panel-default">
@@ -35,7 +35,7 @@ $this->title = $name;
                     </p>
 
                         
-                    </div>
+                 
                   </div>
                 </div>
               </section><!-- /.blog-post -->

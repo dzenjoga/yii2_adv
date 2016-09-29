@@ -9,13 +9,14 @@ $this->title = 'Feed view';
 <div class="col-sm-8 col-sm-offset-1 blog-main">
 
           <div class="row">
-            <div class="col-sm-6">
+            
 <?php
 
 //               var_dump($feed);
 foreach ($feed as $a)
 {  
 ?>
+            <div class="col-sm-6">
               <section class="blog-post">
                 <div class="panel panel-default">
                   <div class="panel-body">
@@ -36,11 +37,12 @@ foreach ($feed as $a)
                   </div>
                 </div>
               </section><!-- /.blog-post -->
+            </div> 
 <?php
 }
 ?>           
               
-            </div>
+           
           </div>
 
           <nav>

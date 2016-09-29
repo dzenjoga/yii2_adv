@@ -14,6 +14,7 @@ use common\models\Twit;
 class SiteController extends Controller
 {
     
+    public $layout = "main_new.php";
     /**
      * @inheritdoc
      */
@@ -106,7 +107,7 @@ class SiteController extends Controller
     
     public function actionCreateTwit()
     {
-       $twit = new Twit();
+       $twit = new Twits();
        
        $post = Yii::$app->request->post("Twit");
        if(count($post))
@@ -116,7 +117,7 @@ class SiteController extends Controller
            
            if($twit->save())
            {
-               $twit = new Twit();
+               $twit = new Twits();
            }    
        }
        

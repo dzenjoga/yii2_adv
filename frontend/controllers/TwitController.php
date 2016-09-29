@@ -71,7 +71,7 @@ class TwitController extends Controller
      public function actionNew()
     {
          
-        $twit = new Twit();
+        $twit = new Twits();
         $twit->image = 'trololo';
         $twit->text = 'asbvTatat';
         if($twit->save())
@@ -91,8 +91,8 @@ class TwitController extends Controller
     public function actionFeed()
     {
          
-        //$twit = new Twit();
-        $twits = Twit::find()->all();
+        //$twit = new Twits();
+        $twits = Twits::find()->all();
                 
         
         return $this->render('feed',[
@@ -103,8 +103,8 @@ class TwitController extends Controller
     public function actionOneTwit()
     {
          
-        //$twit = new Twit();
-        if($twit = Twit::find()->where(['id'=>'181'])->one())
+        //$twit = new Twits();
+        if($twit = Twits::find()->where(['id'=>'41'])->one())
         {   
             return $this->render('one_twit',[
 		'twit' => $twit
