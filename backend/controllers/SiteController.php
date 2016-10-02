@@ -2,11 +2,13 @@
 namespace backend\controllers;
 
 use Yii;
+use yii\web;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\models\LoginForm;
-use common\models\Twit;
+use common\models\Twits;
+use common\models\TwitPublish;
 
 /**
  * Site controller
@@ -25,17 +27,17 @@ class SiteController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['login', 'error'],
+                        'actions' => [ 'error'],
                         'allow' => true,
                   
                     ],
                     [
-                        'actions' => ['logout', 'index'],
+                        'actions' => ['logout', 'index', 'create-twit'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
                     [
-                        'actions' => ['create-twit'],
+                        'actions' => ['login'],
                         'allow' => true,
                         'roles' => ['?'],
                     ]
@@ -79,6 +81,7 @@ class SiteController extends Controller
      */
     public function actionLogin()
     {
+        $this->layout = 'login.php';
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
@@ -107,22 +110,35 @@ class SiteController extends Controller
     
     public function actionCreateTwit()
     {
-       $twit = new Twits();
+       $twit_form = new TwitPublish();
        
-       $post = Yii::$app->request->post("Twit");
+       $post = Yii::$app->request->post("TwitPublish");
        if(count($post))
        {
-           $twit->text = $post['text'];
-           $twit->image = $post['image'];
            
-           if($twit->save())
+           
+       $picture = web\UploadedFile::getInstance($twit_form, 'image'); // filename
+          
+       $image = null;
+            if($picture)
+            {
+                 $image = TwitPublish::uploadImage($picture);  // saved filename with path
+            }
+           
+           
+           $twit_form->text = $post["text"];
+           $twit_form->category_id = $post["category_id"];
+           $twit_form->image = $image;
+           
+           if($twit_form->createTwit())
            {
-               $twit = new Twits();
+               return $this->refresh();
            }    
        }
        
+      // var_dump($twit_form);
         return $this->render('create_twit', [
-                'model' => $twit,
+                'model' => $twit_form,
         ]);
     }
 }

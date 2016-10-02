@@ -6,7 +6,7 @@ use Yii;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use common\models\Twit;
+use common\models\Twits;
 
 
 
@@ -68,25 +68,25 @@ class TwitController extends Controller
         
     }
     
-     public function actionNew()
-    {
-         
-        $twit = new Twits();
-        $twit->image = 'trololo';
-        $twit->text = 'asbvTatat';
-        if($twit->save())
-        {
-           return $this->render('new',[
-		'res' => 'OK!',
-            ]); 
-            
-        } else 
-        {
-           return $this->render('test',[
-		'res' => 'Fail!',
-            ]); 
-        }
-    }
+//     public function actionNew()
+//    {
+//         
+//        $twit = new Twits();
+//        $twit->image = 'trololo';
+//        $twit->text = 'asbvTatat';
+//        if($twit->save())
+//        {
+//           return $this->render('new',[
+//		'res' => 'OK!',
+//            ]); 
+//            
+//        } else 
+//        {
+//           return $this->render('test',[
+//		'res' => 'Fail!',
+//            ]); 
+//        }
+//    }
     
     public function actionFeed()
     {

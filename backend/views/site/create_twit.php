@@ -18,11 +18,11 @@ $form = ActiveForm::begin([
     'options' => ['class' => 'form-horizontal'],    
         ]);
 ?>
+     <?= $form->field($model, 'category_id')->dropDownList(common\models\Twits::$categories, ['prompt' => common\models\Twits::NO_CAT]) ?>
+    <?= $form->field($model, 'text')->textarea() ?>
+    <?= $form->field($model, 'image')->fileInput() ?>
 
-    <?= $form->field($model, 'image') ?>
-    <?= $form->field($model, 'text') ?>
-
-    <?= Html::submitButton('Submit', ['class' => 'btn btn-primary']) ?>
+    <?= Html::submitButton('Create', ['class' => 'btn btn-primary']) ?>
 
 <?php
 ActiveForm::end();
