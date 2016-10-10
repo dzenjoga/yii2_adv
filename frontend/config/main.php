@@ -34,7 +34,7 @@ return [
             ],
         ],
         'errorHandler' => [
-            'errorAction' => 'site/error',
+            'errorAction' => 'twit/error',
         ],
         
         
@@ -50,5 +50,6 @@ return [
         */
     ],
     'params' => $params,
+    'defaultRoute' => 'twit/feed',
  
 ];

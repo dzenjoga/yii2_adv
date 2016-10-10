@@ -8,6 +8,7 @@
 use yii\helpers\Html;
 
 $this->title = $name;
+
 ?>
 <div class="col-sm-8 col-sm-offset-1 blog-main">
 

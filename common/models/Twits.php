@@ -18,15 +18,25 @@ use Yii;
  */
 class Twits extends \yii\db\ActiveRecord
 {
-    const IMAGE_DIR = '../../frontend/web/images/';
-    const IMAGE_PATH = '/images/';
+   public static $image_dir;
+   
+  
+   
+
     const NO_CAT = 'No category';
-    
+    const MODE_UNKNOWN = 0;
     const MODE_TEXT = 1;
     const MODE_IMAGE = 2;
     const MODE_BOTH = 3;
     
-    public static $categories = [
+    public static $modes = [
+        self::MODE_BOTH => 'Text and image', 
+        self::MODE_IMAGE => 'Image', 
+        self::MODE_TEXT => 'Text', 
+   
+    ];
+
+        public static $categories = [
        'Category A', 'Category B', 'Category C', 'Category D'     
     ];
     /**
@@ -72,20 +82,10 @@ class Twits extends \yii\db\ActiveRecord
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
     
-    public static function getImageDir()
-    {
-        if(!is_dir(self::IMAGE_DIR))
-        {
-            mkdir(self::IMAGE_DIR);
-        }
-        return self::IMAGE_DIR;
-    }
+
     
     public function getCategory()
-    {
-//       var_dump($this->category_id);
-//       return $this->category_id;
-        
+    {    
         $a = static::$categories;
         if ($this->category_id == '')
         {
@@ -115,7 +115,83 @@ class Twits extends \yii\db\ActiveRecord
            $result->mode = self::MODE_BOTH; 
         }
         
-        return $result;
+            return $result;
+    }
+
+    public function getImage()
+    {
+            $image = TwitPicture::readImage($this->image);
+            if($image)
+            {
+               return 'data:image/jpg;base64,'. base64_encode($image);
+      
+            }
+            else {
+                return NULL;
+            }
+        
+    }
+    
+    public static function getFeedQuery($page = 1, $filter = null)
+    {
+        $twit_query = static::find()->leftJoin(User::tableName(), static::tableName().'.user_id = '.User::tableName().'.id')->with('user');
+        
+        if($filter)
+        {
+            
+            
+             if($filter->mode)
+            {
+                $or = FALSE;
+                if(in_array(Twits::MODE_BOTH, $filter->mode))
+                {
+                    //var_dump('both!');
+                    $twit_query->where(['!=', 'text', ''])->andWhere(['!=', 'image' , '']);
+                    $or = TRUE;
+                }
+                
+                if(in_array(Twits::MODE_TEXT, $filter->mode))
+                {
+                    //var_dump('text');
+                    if($or)
+                    {
+                        //var_dump('or');
+                        $twit_query->orWhere(['!=', 'text', '']);
+                    }
+                    else
+                    {
+                        //var_dump('nor');
+                        $twit_query->where(['!=', 'text', ''])->andwhere(['image' => NULL]);
+                    }  
+                }
+                
+                if(in_array(Twits::MODE_IMAGE, $filter->mode))
+                {
+                    //var_dump('image');
+                     if($or)
+                    {
+                        //var_dump('or'); 
+                        $twit_query->orWhere(['!=','image', '']);
+                    }
+                    else
+                    {
+                       $twit_query->where(['!=','image', ''])->andwhere(['text' => '']);
+                    }  
+                   
+                }
+            }
+            
+            if($filter->user)
+            {   
+                $twit_query->andWhere([User::tableName().'.id' => $filter->user[0]]);
+                foreach($filter->user as $a)
+                {
+                    $twit_query->orWhere([User::tableName().'.id' => $a]);
+                }
+                 
+            }
+        }
+        return $twit_query->orderby(['time_publish' => SORT_DESC]);
     }
          
 }

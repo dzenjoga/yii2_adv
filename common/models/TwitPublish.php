@@ -44,35 +44,10 @@ class TwitPublish extends Model
         $twit->text = $this->text;
         $twit->image = $this->image;
         $twit->category_id = $this->category_id; 
-        $twit->user_id = \Yii::$app->user->id;
+        $twit->user_id = \yii::$app->user->id;
         
         var_dump($twit);
         
         return $twit->save() ? $twit : null;
-    }
-    
-    
-     /**
-     * @param $picture UploadedFile
-     * @return bool upload result
-     */
-    public static function uploadImage($picture)
-    {
-  
-        $picture_filename = Twits::getImageDir() . $picture->name;
-        if($picture->saveAs($picture_filename))
-        {
-            return Twits::IMAGE_PATH . $picture->name;
-        }
-        else
-        {
-            return null;
-        }
-
-
-            
-    }
-
-
-   
+    } 
 }

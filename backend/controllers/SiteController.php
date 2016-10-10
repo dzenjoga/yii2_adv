@@ -9,6 +9,7 @@ use yii\filters\AccessControl;
 use common\models\LoginForm;
 use common\models\Twits;
 use common\models\TwitPublish;
+use common\models\TwitPicture;
 
 /**
  * Site controller
@@ -110,22 +111,18 @@ class SiteController extends Controller
     
     public function actionCreateTwit()
     {
-       $twit_form = new TwitPublish();
+        $twit_form = new TwitPublish();
        
-       $post = Yii::$app->request->post("TwitPublish");
-       if(count($post))
-       {
-           
-           
-       $picture = web\UploadedFile::getInstance($twit_form, 'image'); // filename
-          
-       $image = null;
-            if($picture)
+        $post = Yii::$app->request->post("TwitPublish");
+        if(count($post))
+        {
+        $picture = web\UploadedFile::getInstance($twit_form, 'image'); // filename
+        $image = null;
+        if($picture)
             {
-                 $image = TwitPublish::uploadImage($picture);  // saved filename with path
+                 $image = TwitPicture::uploadImage($picture);  // saved filename with path
             }
-           
-           
+
            $twit_form->text = $post["text"];
            $twit_form->category_id = $post["category_id"];
            $twit_form->image = $image;
