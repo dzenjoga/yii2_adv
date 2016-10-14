@@ -6,6 +6,7 @@ use Yii;
 use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
+use common\models\Likes;
 
 
 /**
@@ -19,14 +20,19 @@ class AjaxController extends Controller
     {
        $id = Yii::$app->request->post("id");
        
-       if($id != null)
+       if($id != NULL)
        {
-           return  '{"status": "success", "id": "{$id}"}';  
+           $like = new Likes();
+           $like->add($id);
+           $likes_count_upd = Likes::countLikes($id);
+           //Yii::$app->response->format = Response::FORMAT_JSON;
+           return  $likes_count_upd;  
        } 
+       
        else
-       {
+       {   //$id = var_dump($id);
            header('HTTP/1.1 404 Not Found'); // chnage to exception
-           echo '"status": "error" "message": "data is not trasmitted"';
+           echo "'status': 'error' 'message': 'data is not trasmitted $id'";
            die();
        }
       

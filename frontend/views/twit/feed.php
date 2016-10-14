@@ -5,6 +5,7 @@ use yii\helpers\Html;
 use common\models\Twits;
 use yii\helpers\Url;
 use common\models\User;
+use common\models\Likes;
 
 /*
  *  @var $this yii\web\View 
@@ -16,20 +17,49 @@ use common\models\User;
  **/
 
 $this->title = 'Feed view';
-
 $like_url = Url::to(['ajax/like']);
+ 
 
-$this->registerJsFile('js/like.js', ['depends' => [yii\web\JqueryAsset::className()]]);   
+$this->registerJs(<<<JS
+   $(".like-btn").click(
+        function()
+        {
+            $.ajax( 
+             { 
+                    url: "{$like_url}", 
+                     type: "POST", 
+                     data: { id: $(this).data("id") }, 
+                     dataType: 'json', 
+                     context: $(this) 
+             } 
 
+            ).done(
+                function(msg)
+                {
+                   $(this).text(msg + ' ').append( 
+                         $("<i/>", {class: "fa fa-heart"}) 
+                    ); 
+                }
+            );    
+        }
+    );                 
+JS
+);
+                    
+//var_dump($users);
+//echo '<br>';
 //var_dump($authors);
+
 $form = ActiveForm::begin([
     'id' => 'Filter-form',
     'options' => ['class' => 'form-vertical'],    
         ]);
 ?>
-    <?= $form->field($filter, 'user')->dropDownList($users, ['prompt' => 'Все пользователи']) ?>
+
+    <?= $form->field($filter, 'user')->dropDownList($authors, ['prompt' => 'Все пользователи']) ?>
     <?= $form->field($filter, 'mode')->checkboxList(Twits::$modes) ?>
     <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
+
 <?php
 ActiveForm::end();
 ?>
@@ -39,14 +69,13 @@ ActiveForm::end();
           <div class="row">
             
 <?php
-//               var_dump($feed);
 foreach ($feed as $a)
 {  
     $twit_content = $a->getContent();
     $image_src = $a->getImage();
+    $likes_count = Likes::countLikes($a->id);
 ?>
  
-
             <div class="col-sm-6">
               <section class="blog-post">
                 <div class="panel panel-default">
@@ -84,12 +113,11 @@ foreach ($feed as $a)
                       
                       <a class="btn btn-info" href="<?= \yii\helpers\Url::to(['twit/one-twit','id' => $a->id]) ?>" >Read more</a>
                       
-                      <a class="blog-post-share pull-right" href="#">
-                        <i class="material-icons">&#xE80D;</i> 
-                      </a>
+                    
                       
-                      <button class="like-btn">
-                          <i class="fa fa-heart" data-id =" <?= $a->id?>"> </i>
+                      <button class="btn like-btn" data-id ="<?= $a->id ?>">  
+                          <?= $likes_count ?>
+                          <i class="fa fa-heart"></i>
                       </button>
                      
                     </div>

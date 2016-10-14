@@ -7,6 +7,7 @@ use frontend\assets\TwitAsset;
 use yii\helpers\Html;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
+use yii\helpers\Url;
  
 TwitAsset::register($this);
 ?>
@@ -31,7 +32,7 @@ TwitAsset::register($this);
       
     <div class="navbar navbar-material-blog navbar-info navbar-absolute-top navbar-overlay">
 
-      <div class="navbar-image" style="background-image: url('img/travel/unsplash-1.jpg');background-position: center 30%;"></div>
+      <div class="navbar-image" style="background-image: url('<?= Url::to(['img/travel/unsplash-1.jpg']) ?>');background-position: center 30%;"></div>
 
       <div class="navbar-wrapper container">
         <div class="navbar-header">

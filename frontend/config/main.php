@@ -36,18 +36,15 @@ return [
         'errorHandler' => [
             'errorAction' => 'twit/error',
         ],
-        
-        
-        
-        
-        /*
+
         'urlManager' => [
+           // 'class' => 'yii\web\UrlManager',
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
             ],
         ],
-        */
+
     ],
     'params' => $params,
     'defaultRoute' => 'twit/feed',

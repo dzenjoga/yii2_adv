@@ -160,14 +160,23 @@ class TwitController extends Controller
         *  @var $users all users
         */
         
-        $users = UserFilter::getAllUsers($twits); 
+        $users = UserFilter::getAllUsers();
+        
+        if(UserFilter::getAutorsList() != NULL)
+        {
+           $authors = UserFilter::getAutorsList();
+        }
+        else 
+        {
+            $authors = $users;
+        }
         
         
         return $this->render('feed',[
 		'feed' => $twits,
                 'filter' => $filter,
                 'users' => $users,
-                'authors' => UserFilter::getAutorsList(),
+                'authors' => $authors,
             ]);  
     }
     

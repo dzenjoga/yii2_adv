@@ -28,15 +28,20 @@ class UserFilter extends Model
     
     public static function getAutorsList()
     {
+        if(Yii::$app->user->isGuest)
+        {
+            return NULL;
+        }
+        
+        // the authors from subscribtion will be added here  
         $authors[] = 'admin';
         $authors[] = Yii::$app->getUser()->getIdentity()->username;
-        // the authors from subscribtion will be added here 
-        
         return $authors;
     }
     
-    public static function getAllUsers($twits)
+    public static function getAllUsers()
     {
+        $twits = Twits::getFeedQuery()->all();;
         $users = []; 
         foreach ($twits as $a)
         {
